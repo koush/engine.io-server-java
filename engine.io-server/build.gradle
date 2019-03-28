@@ -12,7 +12,7 @@ android {
 
     dependencies {
         api ('io.socket:engine.io-client:1.0.0')
-        api group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+        api group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
     }
 
     compileOptions {
