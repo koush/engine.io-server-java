@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,6 +24,10 @@ import java.util.TimerTask;
  * one per object.
  */
 public final class EngineIoSocket extends Emitter {
+
+    private static final List<Packet> noopPayload = new ArrayList<Packet>() {{
+        add(new Packet<>(Packet.NOOP));
+    }};
 
     private final String mSid;
     private final EngineIoServer mServer;
@@ -150,10 +155,9 @@ public final class EngineIoSocket extends Emitter {
                     add(replyPacket);
                 }});
 
-                final Packet<String> noopPacket = new Packet<>(Packet.NOOP);
-                mTransport.send(new ArrayList<Packet>(){{
-                    add(noopPacket);
-                }});
+                if (mTransport.isWritable()) {
+                    mTransport.send(noopPayload);
+                }
 
                 emit("upgrading", transport);
             } else if(packet.type.equals(Packet.UPGRADE) && (mReadyState != ReadyState.CLOSED) && (mReadyState != ReadyState.CLOSING)) {
