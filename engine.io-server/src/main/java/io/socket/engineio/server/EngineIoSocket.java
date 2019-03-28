@@ -150,6 +150,11 @@ public final class EngineIoSocket extends Emitter {
                     add(replyPacket);
                 }});
 
+                final Packet<String> noopPacket = new Packet<>(Packet.NOOP);
+                mTransport.send(new ArrayList<Packet>(){{
+                    add(noopPacket);
+                }});
+
                 emit("upgrading", transport);
             } else if(packet.type.equals(Packet.UPGRADE) && (mReadyState != ReadyState.CLOSED) && (mReadyState != ReadyState.CLOSING)) {
                 cleanup.run();
